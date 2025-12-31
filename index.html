@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fanzz</title>
+
+<style>
+/* ANIMASI TOMBOL WHATSAPP RESMI */
+button[onclick*="wa.me"] {
+  transition: all 0.4s ease;
+}
+button[onclick*="wa.me"]:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(37,211,102,0.6);
+}
+button[onclick*="wa.me"]:active {
+  transform: scale(0.98);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:linear-gradient(135deg,#1e1e2f,#2a2a40);
+  min-height:100vh;display:flex;
+  justify-content:center;align-items:center;
+  color:#fff;padding:20px;
+  overflow-x:hidden;overflow-y:auto;
+  transition: background 0.5s ease;
+}
+body.light-mode {
+  background: linear-gradient(135deg,#f0f4f8,#d9e2ec);
+  color: #000;
+}
+.card{
+  width:100%;max-width:420px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:28px;border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 20px 40px rgba(0,0,0,0.3),
+             inset 0 1px 0 rgba(255,255,255,0.15);
+  padding:30px 24px;text-align:center;
+  animation:fadeIn 0.6s ease-out;position:relative;overflow:hidden;
+  max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  margin:0 auto;
+}
+body.light-mode .card {
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.05),transparent,rgba(255,255,255,0.03));
+  pointer-events:none;
+}
+.header{
+  font-size:22px;font-weight:700;margin-bottom:20px;
+  background:linear-gradient(90deg,#fff,#ddd);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-0.5px
+}
+body.light-mode .header { color: #000; }
+input{
+  width:100%;max-width:320px;padding:16px 18px;border-radius:18px;border:none;
+  background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);
+  color:#fff;font-size:16px;margin:12px auto;display:block;
+  transition:all 0.3s ease;outline:none
+}
+body.light-mode input { background: rgba(0,0,0,0.1); color: #000; }
+input::placeholder{color:rgba(255,255,255,0.6)}
+body.light-mode input::placeholder { color: rgba(0,0,0,0.6); }
+button{
+  width:80%;max-width:320px;padding:16px;border:none;border-radius:18px;
+  font-size:16px;font-weight:600;margin:12px auto;display:block;
+  color:#fff;cursor:pointer;transition:all 0.3s ease;position:relative;overflow:hidden;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2)
+}
+button::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  transform:translateX(-100%);transition:transform 0.6s;
+}
+button:hover::before{transform:translateX(100%)}
+button:active{transform:scale(0.98)}
+.blue{background:linear-gradient(135deg,#007aff,#005ecb)}
+.green{background:linear-gradient(135deg,#34c759,#28a745)}
+.red{background:linear-gradient(135deg,#ff3b30,#d32f2f)}
+.orange{background:linear-gradient(135deg,#ff9500,#f57c00)}
+.gray{background:linear-gradient(135deg,#8e8e93,#6d6d72)}
+
+.webbox{
+  width:100%;max-width:380px;margin:16px auto 0 auto;
+  background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.12);border-radius:20px;
+  padding:18px;text-align:left;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.webbox:hover{transform:translateY(-4px);box-shadow:0 10px 25px rgba(0,0,0,0.2)}
+.webtitle{display:flex;justify-content:space-between;font-weight:600;font-size:15px;margin-bottom:10px}
+.status-on{color:#34c759}.status-off{color:#ff3b30}.status-lock{color:#ff9500}
+.btn-row{display:flex;gap:10px;margin-top:12px;justify-content:center;flex-wrap:wrap;}
+.btn-row button{flex:1;min-width:70px;padding:12px 8px;margin:0;}
+
+.user-menu-container {
+  margin-top: 30px;
+  text-align: center;
+}
+.user-welcome {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.user-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 40px;
+}
+
+/* MENU CARD - GLASSMORPHISM + ANIMASI GLOW */
+.menu-card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 24px;
+  margin: 16px auto;
+  max-width: 380px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: all 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.menu-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,122,255,0.2), rgba(0,255,255,0.2));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.menu-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,122,255,0.4);
+}
+.menu-card:hover::before {
+  opacity: 1;
+}
+.menu-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+.menu-card:hover .menu-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+.menu-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.menu-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* LOGO APP */
+.app-logo {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: glowPulse 3s infinite alternate;
+}
+@keyframes glowPulse {
+  from { text-shadow: 0 0 20px rgba(0,122,255,0.8); }
+  to { text-shadow: 0 0 40px rgba(0,255,255,0.8); }
+}
+
+/* DEVELOPER INFO */
+.dev-info {
+  margin-top: 50px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.8;
+}
+
+/* PROFIL INFO */
+.profil-info {
+  margin: 40px 0;
+  font-size: 16px;
+  line-height: 2;
+  color: rgba(255,255,255,0.9);
+}
+
+/* PENGATURAN TOGGLE */
+.toggle-container {
+  margin: 40px 0;
+}
+.toggle-label {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
+}
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #007aff;
+}
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.sub-page { display: none; }
+.back-btn-bottom {
+  width: 80%;
+  max-width: 320px;
+  margin: 40px auto 20px auto;
+  padding: 16px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.back-btn-bottom:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+}
+
+.website-list-btn {
+  width: 85%;
+  max-width: 340px;
+  margin: 12px auto;
+  display: block;
+  padding: 16px;
+  background: linear-gradient(135deg,#007aff,#005ecb);
+  color: #fff;
+  border-radius: 18px;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.website-list-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(0,122,255,0.5);
+}
+
+.countdown{
+  font-size:20px;font-weight:700;margin-bottom:24px;padding:16px;
+  background:rgba(255,255,255,0.1);border-radius:20px;letter-spacing:1px;
+  backdrop-filter:blur(8px);box-shadow:inset 0 2px 10px rgba(0,0,0,0.2);
+  max-width:320px;margin:20px auto;
+}
+
+.notify{
+  position:fixed;top:-100px;left:50%;transform:translateX(-50%);
+  background:rgba(255,59,48,0.9);backdrop-filter:blur(10px);color:#fff;
+  padding:16px 24px;border-radius:18px;font-weight:600;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  transition:top 0.5s cubic-bezier(0.68,-0.55,0.27,1.55);z-index:99
+}
+.notify.show{top:40px}
+.version{
+  position:fixed;bottom:16px;right:16px;font-size:12px;color:rgba(255,255,255,0.5);font-weight:500
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* Overlay untuk website yang dikunci */
+.lock-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 0.4s ease;
+}
+.lock-icon {
+  font-size: 100px;
+  margin-bottom: 30px;
+  color: #ff9500;
+}
+.lock-message {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.lock-close {
+  margin-top: 40px;
+  padding: 14px 40px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 18px;
+  cursor: pointer;
+}
+
+/* ANIMASI GEMBOK FULL SCREEN SAAT UPDATE SISTEM */
+.update-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeInOverlay 0.6s ease-out;
+  pointer-events: all;
+}
+.update-lock-icon {
+  font-size: 120px;
+  margin-bottom: 30px;
+  color: #ff9500;
+  animation: rotatePulse 3s infinite linear;
+}
+.update-message {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-align: center;
+  max-width: 80%;
+}
+.update-subtitle {
+  font-size: 18px;
+  color: rgba(255,255,255,0.8);
+  text-align: center;
+  max-width: 80%;
+}
+.update-loader {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(255,149,0,0.3);
+  border-top: 6px solid #ff9500;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+  margin-top: 40px;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rotatePulse {
+  0% { transform: rotate(0deg) scale(1); text-shadow: 0 0 20px rgba(255,149,0,0.8); }
+  50% { transform: rotate(180deg) scale(1.15); text-shadow: 0 0 50px rgba(255,149,0,1); }
+  100% { transform: rotate(360deg) scale(1); text-shadow: 0 0 20px rgba(255,149,0,0.8); }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="notify" id="notify"></div>
+
+<audio id="deniedSound" preload="auto">
+  <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+</audio>
+
+<!-- OVERLAY UPDATE SISTEM (FULL SCREEN GEMBOK) -->
+<div class="update-overlay" id="updateOverlay" style="display:none;">
+  <div class="update-lock-icon">🔒</div>
+  <div class="update-message">Sistem Sedang Diupdate oleh Admin</div>
+  <div class="update-subtitle">Mohon tunggu sebentar, halaman akan reload otomatis...</div>
+  <div class="update-loader"></div>
+</div>
+
+<!-- Overlay Locked Website -->
+<div class="lock-overlay" id="lockOverlay" style="display:none;">
+  <div class="lock-icon">🔒</div>
+  <div class="lock-message">Website Ini Dikunci oleh Admin</div>
+  <div style="color:rgba(255,255,255,0.7);text-align:center;max-width:300px;">
+    Hubungi admin untuk membuka akses
+  </div>
+  <div class="lock-close" onclick="hideLock()">Tutup</div>
+</div>
+
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+  <div class="header">🔐 Login</div>
+  <input id="loginInput" placeholder="KEY">
+  <button class="blue" onclick="login()">Masuk</button>
+  <p style="margin-top:20px;font-size:14px;color:rgba(255,255,255,0.7)">
+    Hubungi Admin untuk mendapatkan Key akses
+  </p>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="card" id="adminBox" style="display:none">
+  <div class="header">👑 Admin Panel</div>
+  
+  <div class="admin-date-container">
+    <label style="display:block;margin-bottom:8px;color:rgba(255,255,255,0.8);font-size:14px;">
+      Pilih Tanggal Expired
+    </label>
+    <input type="date" id="expiredDate">
+  </div>
+  
+  <button class="orange" onclick="setExpired()">⌛ Set Tanggal Expired</button>
+  
+  <div id="adminWebList" style="margin-top:20px"></div>
+  
+  <button class="gray" onclick="logout()">🚪 Logout</button>
+</div>
+
+<!-- USER MAIN DASHBOARD -->
+<div class="card" id="userMain" style="display:none">
+  <div class="countdown" id="countdownText">⌛ --</div>
+  
+  <div class="app-logo">👑</div>
+  
+  <div class="user-menu-container">
+    <div class="user-welcome">Selamat Datang di Website Fanzz</div>
+    <div class="user-subtitle">Anda berhasil masuk!</div>
+
+    <div class="menu-card" onclick="showSubPage('profil')">
+      <div class="menu-icon">👤</div>
+      <div class="menu-title">Profil</div>
+      <div class="menu-desc">Lihat dan edit informasi akun Anda</div>
+    </div>
+
+    <div class="menu-card" onclick="showSubPage('website')">
+      <div class="menu-icon">🌐</div>
+      <div class="menu-title">WEBSITE</div>
+      <div class="menu-desc">All website ada di sini</div>
+    </div>
+
+    <div class="menu-card" onclick="showSubPage('pengaturan')">
+      <div class="menu-icon">⚙️</div>
+      <div class="menu-title">Pengaturan</div>
+      <div class="menu-desc">Sesuaikan preferensi aplikasi</div>
+    </div>
+
+    <div class="menu-card" onclick="logout()">
+      <div class="menu-icon">→</div>
+      <div class="menu-title">Keluar</div>
+      <div class="menu-desc">Kembali ke halaman login</div>
+    </div>
+  </div>
+
+  <div class="dev-info">
+    <strong>Developer app :</strong> Fanzz<br>
+    <strong>Brand Product :</strong> Website<br>
+  </div>
+</div>
+
+<!-- SUB PAGE: PROFIL -->
+<div class="card sub-page" id="profilPage">
+  <div class="header">👤 Profil</div>
+  
+  <div class="profil-info" id="profilInfo">
+    Memuat informasi...
+  </div>
+  
+  <div class="dev-info" style="margin:40px 0 20px 0; font-size:14px; color:rgba(255,255,255,0.7); line-height:1.8;">
+    <strong>Developer app :</strong> Fanzz<br>
+    <strong>Brand Product :</strong> Website<br>
+    <strong>WhatsApp :</strong> +6285808608116<br><br>
+    Jika kalian ingin lebih mudah dalam headshot, beli lah app vip dari kami
+  </div>
+
+<div style="margin:40px 0 20px 0;">
+  <button class="green" style="background:linear-gradient(135deg,#007aff,#128C7E); box-shadow:0 8px 20px rgba(37,211,102,0.4); display:flex; align-items:center; justify-content:center; gap:12px;"
+          onclick="window.open('https://wa.me/6285808608116?text=Halo%20Admin', '_blank')">
+    <img src="https://logos-world.net/wp-content/uploads/2020/05/WhatsApp-Symbol.png" alt="WhatsApp" style="width:38px; height:20px;">
+    Hubungi Admin
+  </button>
+</div>
+  
+  <div class="back-btn-bottom" onclick="showSubPage('main')">← Kembali</div>
+</div>
+
+<!-- SUB PAGE: WEBSITE -->
+<div class="card sub-page" id="websitePage">
+  <div class="header">🌐 WEBSITE</div>
+  <div id="userWebList" style="margin-top:20px;"></div>
+  <div class="back-btn-bottom" onclick="showSubPage('main')">← Kembali</div>
+</div>
+
+<!-- SUB PAGE: PENGATURAN -->
+<div class="card sub-page" id="pengaturanPage">
+  <div class="header">⚙️ Pengaturan</div>
+  
+  <div class="toggle-container">
+    <div class="toggle-label">Gelap / Mode Terang</div>
+    <label class="toggle-switch">
+      <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+      <span class="slider"></span>
+    </label>
+  </div>
+  
+  <p style="color:rgba(255,255,255,0.7);margin:40px 0;">Versi Web: v13.0</p>
+  
+  <div class="back-btn-bottom" onclick="showSubPage('main')">← Kembali</div>
+</div>
+
+<div class="version">Fanzz • Final v13.0</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBeNwUV8diSam7fHgWTCL4ljVLcCvZq1TI",
+  authDomain: "by-fanzz-fdf42.firebaseapp.com",
+  databaseURL: "https://by-fanzz-fdf42-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "by-fanzz-fdf42",
+  storageBucket: "by-fanzz-fdf42.firebasestorage.app",
+  messagingSenderId: "921867622516",
+  appId: "1:921867622516:web:1884b3e569c8fd85441921",
+  measurementId: "G-ZKE4T82W82"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const keyRef = db.ref('access_key');
+const expRef = db.ref('key_expired');
+const websitesRef = db.ref('websites');
+const bannedRef = db.ref('banned_keys');
+const systemUpdateRef = db.ref('system_update');
+
+const ADMIN_PASSWORD = "@123";
+let timer = null;
+let currentUserKey = "";
+
+function enableAudio(){
+  const s = document.getElementById("deniedSound");
+  s.muted = true;
+  s.play().then(()=>{s.pause();s.currentTime=0;s.muted=false;}).catch(()=>{});
+}
+
+function notify(msg){
+  const n = document.getElementById("notify");
+  n.innerText = msg;
+  n.classList.add("show");
+  setTimeout(()=>n.classList.remove("show"),3200);
+}
+
+function playDenied(){
+  document.getElementById("deniedSound").play();
+}
+
+function login(){
+  enableAudio();
+  const v = document.getElementById("loginInput").value.trim();
+  if(!v){notify("⚠️ Masukkan key");return;}
+
+  if(v === ADMIN_PASSWORD){
+    show("admin");
+    return;
+  }
+
+  keyRef.once('value').then(snap => {
+    const validKey = snap.val();
+    if(v === validKey){
+      expRef.once('value').then(expSnap => {
+        const exp = expSnap.val();
+        if(exp && Date.now() < exp){
+          bannedRef.once('value').then(banSnap => {
+            const bannedKeys = banSnap.val() || {};
+            if(bannedKeys[v]){
+              notify("⛔ Key Anda telah dibanned oleh Admin");
+              playDenied();
+              return;
+            }
+            currentUserKey = v;
+            show("user");
+          });
+        } else {
+          notify("🔴 Key telah expired");
+          playDenied();
+        }
+      });
+    } else {
+      notify("✖️ Key salah");
+      playDenied();
+    }
+  });
+}
+
+function show(mode){
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("adminBox").style.display = "none";
+  document.getElementById("userMain").style.display = "none";
+
+  if(mode === "admin"){
+    document.getElementById("adminBox").style.display = "block";
+    renderAdmin();
+  } else if(mode === "user"){
+    document.getElementById("userMain").style.display = "block";
+    startCountdown();
+    renderUser();
+  }
+}
+
+function logout(){
+  currentUserKey = "";
+  clearInterval(timer);
+  document.getElementById("loginBox").style.display = "block";
+  document.getElementById("adminBox").style.display = "none";
+  ["userMain","profilPage","websitePage","pengaturanPage"].forEach(id => {
+    document.getElementById(id).style.display = "none";
+  });
+  document.getElementById("loginInput").value = "";
+}
+
+function setExpired(){
+  const dateInput = document.getElementById("expiredDate").value;
+  if(!dateInput){
+    notify("Pilih tanggal terlebih dahulu");
+    return;
+  }
+  const expTimestamp = new Date(dateInput + "T23:59:59").getTime();
+  expRef.set(expTimestamp).then(()=>{
+    notify("Tanggal expired berhasil diset");
+  });
+}
+
+function getRemain(){
+  return expRef.once('value').then(snap=>{
+    const exp = snap.val() || 0;
+    const total = exp - Date.now();
+    const d = Math.floor(total / (1000*60*60*24));
+    const h = Math.floor((total % (1000*60*60*24)) / (1000*60*60));
+    const m = Math.floor((total % (1000*60*60)) / (1000*60));
+    return {total, d, h, m};
+  });
+}
+
+function startCountdown(){
+  const cd = document.getElementById("countdownText");
+  function update(){
+    getRemain().then(t=>{
+      if(t.total <= 0){
+        cd.innerHTML = "🔴 Expired";
+        clearInterval(timer);
+        logout();
+        notify("Key Anda telah expired");
+      } else {
+        cd.innerHTML = `⌛ ${t.d} hari ${t.h} jam ${t.m} menit lagi`;
+      }
+    });
+  }
+  update();
+  timer = setInterval(update, 60000);
+}
+
+function showSubPage(page){
+  ["userMain","profilPage","websitePage","pengaturanPage"].forEach(id => {
+    document.getElementById(id).style.display = "none";
+  });
+  if(page === "main"){
+    document.getElementById("userMain").style.display = "block";
+    startCountdown();
+  } else if(page === "website"){
+    document.getElementById("websitePage").style.display = "block";
+    renderUser();
+  } else if(page === "profil"){
+    document.getElementById("profilPage").style.display = "block";
+    loadProfilInfo();
+  } else {
+    document.getElementById(page + "Page").style.display = "block";
+  }
+}
+
+function loadProfilInfo(){
+  const info = document.getElementById("profilInfo");
+  info.innerHTML = `
+    <strong>Key Akses:</strong> ${currentUserKey || "Tidak tersedia"}<br>
+    <strong>Status:</strong> <span style="color:#34c759">Aktif</span><br>
+    <strong>Masa Berlaku:</strong> <span id="profilExpire">Memuat...</span><br><br>
+    Akun Anda aman dan aktif. Nikmati semua fitur!
+  `;
+
+  getRemain().then(t => {
+    const el = document.getElementById("profilExpire");
+    if(t.total <= 0){
+      el.innerText = "Expired";
+      el.style.color = "#ff3b30";
+    } else {
+      el.innerText = `${t.d} hari ${t.h} jam ${t.m} menit lagi`;
+    }
+  });
+}
+
+function toggleTheme(){
+  document.body.classList.toggle("light-mode");
+  localStorage.setItem("theme", document.body.classList.contains("light-mode") ? "light" : "dark");
+}
+
+function renderAdmin(){
+  const list = document.getElementById("adminWebList");
+  list.innerHTML = "<p style='color:rgba(255,255,255,0.6);text-align:center;padding:20px;'>Memuat...</p>";
+
+  websitesRef.once('value').then(snapshot => {
+    list.innerHTML = "";
+    const data = snapshot.val() || {};
+
+    for(let i = 1; i <= 5; i++){
+      let siteName = data[i]?.name || "Website " + i;
+      let siteUrl = data[i]?.url || "";
+      let siteStatus = data[i]?.status || "off";
+      let siteLock = data[i]?.lock || "off";
+
+      list.innerHTML += `
+      <div class="webbox">
+        <div class="webtitle">
+          <span>🌐 ${siteName}</span>
+          <span class="${siteLock === 'on' ? 'status-lock' : siteStatus === 'on' ? 'status-on' : 'status-off'}">
+            ${siteLock === 'on' ? 'LOCKED' : siteStatus === 'on' ? 'ON' : 'OFF'}
+          </span>
+        </div>
+        <input id="name${i}" value="${siteName}" placeholder="Nama Website">
+        <input id="url${i}" value="${siteUrl}" placeholder="https://example.com">
+        <div class="btn-row">
+          <button class="blue" onclick="saveWeb(${i})">💾 Simpan</button>
+          <button class="green" onclick="setOn(${i})">ON</button>
+          <button class="red" onclick="setOff(${i})">OFF</button>
+          <button class="orange" onclick="toggleLock(${i})">
+            ${siteLock === 'on' ? '🔓 Buka' : '🔒 Kunci'}
+          </button>
+        </div>
+      </div>`;
+    }
+  });
+}
+
+function saveWeb(i){
+  const name = document.getElementById("name"+i).value.trim() || "Website "+i;
+  const url = document.getElementById("url"+i).value.trim();
+  websitesRef.child(i).update({name, url});
+  notify("💾 Website disimpan");
+}
+
+function setOn(i){websitesRef.child(i).update({status:"on"}); renderAdmin();}
+function setOff(i){websitesRef.child(i).update({status:"off"}); renderAdmin();}
+function toggleLock(i){
+  websitesRef.child(i).once('value').then(snap => {
+    const current = snap.val()?.lock || "off";
+    const newLock = current === "on" ? "off" : "on";
+    websitesRef.child(i).update({lock: newLock});
+    notify(newLock === "on" ? "🔒 Dikunci" : "🔓 Dibuka");
+    renderAdmin();
+  });
+}
+
+function renderUser(){
+  const list = document.getElementById("userWebList");
+  list.innerHTML = "<p style='color:rgba(255,255,255,0.6);text-align:center;padding:20px;'>Memuat...</p>";
+  let ada = false;
+  websitesRef.once('value').then(snapshot => {
+    list.innerHTML = "";
+    snapshot.forEach(child => {
+      const data = child.val();
+      if(data.status === "on" && data.lock !== "on"){
+        ada = true;
+        list.innerHTML += `
+        <button class="website-list-btn" onclick="openWeb('${child.key}')">
+          🌐 ${data.name || "Website"}
+        </button>`;
+      }
+    });
+    if(!ada){
+      list.innerHTML = "<p style='color:rgba(255,255,255,0.7);margin:40px 0;'>Belum ada website aktif atau tidak terkunci</p>";
+    }
+  });
+}
+
+function openWeb(id){
+  websitesRef.child(id).once('value').then(snap => {
+    const data = snap.val();
+    if(data.lock === "on"){
+      showLock();
+      playDenied();
+      return;
+    }
+    if(data.url){
+      location.href = data.url;
+    } else {
+      notify("⚠️ URL belum diatur");
+    }
+  });
+}
+
+function showLock(){
+  document.getElementById("lockOverlay").style.display = "flex";
+}
+
+function hideLock(){
+  document.getElementById("lockOverlay").style.display = "none";
+}
+
+// FITUR UPDATE SISTEM (SUPPORT DURASI DETIK DARI ADMIN)
+let lastUpdateTimestamp = parseInt(localStorage.getItem('last_system_update')) || 0;
+
+function checkSystemUpdate() {
+  systemUpdateRef.on('value', (snap) => {
+    const updateData = snap.val();
+    
+    // Kalau tidak ada data update sama sekali, abaikan
+    if (!updateData || !updateData.timestamp) return;
+    
+    // Ambil timestamp terbaru dari objek
+    const newTimestamp = updateData.timestamp;
+    
+    // Cek apakah ini update baru (timestamp lebih besar dari yang terakhir disimpan)
+    if (newTimestamp > lastUpdateTimestamp) {
+      // Simpan timestamp baru ke localStorage biar tidak trigger lagi
+      localStorage.setItem('last_system_update', newTimestamp);
+      
+      // Tampilkan overlay gembok full screen
+      document.getElementById('updateOverlay').style.display = 'flex';
+      
+      // Mainkan suara denied (opsional)
+      playDenied();
+      
+      // Ambil durasi dari admin, default 5 detik kalau tidak ada
+      const durationSeconds = updateData.duration || 5;
+      const durationMs = durationSeconds * 1000;
+      
+      // Auto reload setelah durasi habis
+      setTimeout(() => {
+        location.reload();
+      }, durationMs);
+    }
+  });
+}
+
+// Panggil fungsi ini saat halaman dimuat
+checkSystemUpdate();
+
+window.onload = function(){
+  if(localStorage.getItem("theme") === "light"){
+    document.body.classList.add("light-mode");
+    document.getElementById("themeToggle").checked = true;
+  }
+}
+</script>
+</body>
+</html>
